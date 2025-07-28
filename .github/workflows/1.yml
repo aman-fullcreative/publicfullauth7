@@ -47,7 +47,6 @@ jobs:
           --archive-timeout=10m
           --concurrency=8
           --debug
-          --no-update
         
     - name: Display Scan Results
       if: always()
