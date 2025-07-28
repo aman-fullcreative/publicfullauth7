@@ -140,7 +140,7 @@ jobs:
         retention-days: 30
 
     - name: Comment on PR with Secret Summary
-      if: ${{ always() && github.event_name == 'pull_request' }}
+      if: github.event_name == 'pull_request'
       uses: actions/github-script@v7
       env:
         TOTAL_FINDINGS: ${{ steps.parse_results.outputs.total_findings }}
@@ -149,38 +149,30 @@ jobs:
         script: |
           const totalFindings = process.env.TOTAL_FINDINGS || '0';
           const secretsFound = process.env.SECRETS_FOUND === 'true';
-          
-          let commentBody;
-          
+
+          let commentBody = "";
+
           if (secretsFound && parseInt(totalFindings) > 0) {
-            commentBody = `## 🔍 TruffleHog Secret Scan Results
-            
-**Total Secrets Detected: ${totalFindings}**
-
-⚠️ **Action Required**: Secrets were detected in this PR.
-
-📋 **Next Steps:**
-1. Download the detailed report from the Actions artifacts
-2. Review each detected secret for accuracy  
-3. Remove/rotate any real credentials immediately
-4. Update exclusion patterns for false positives
-5. Push fixes to this branch
-
-> 💡 **Note**: This scan uses maximum coverage settings and may include test fixtures. Review carefully to distinguish between real secrets and test data.`;
+            commentBody += "## 🔍 TruffleHog Secret Scan Results\n\n";
+            commentBody += "**Total Secrets Detected:** " + totalFindings + "\n\n";
+            commentBody += "⚠️ **Action Required**: Secrets were detected in this PR.\n\n";
+            commentBody += "📋 **Next Steps:**\n";
+            commentBody += "1. Download the detailed report from the Actions artifacts\n";
+            commentBody += "2. Review each detected secret for accuracy\n";
+            commentBody += "3. Remove/rotate any real credentials immediately\n";
+            commentBody += "4. Update exclusion patterns for false positives\n";
+            commentBody += "5. Push fixes to this branch\n\n";
+            commentBody += "> 💡 **Note**: This scan uses maximum coverage settings and may include test fixtures. Review carefully to distinguish between real secrets and test data.";
           } else {
-            commentBody = `## 🔍 TruffleHog Secret Scan Results
-
-✅ **No secrets detected in this PR**
-
-The TruffleHog maximum coverage scan completed successfully with no findings.
-
-- All ${totalFindings || '800+'} detectors were enabled
-- Full repository history was scanned
-- No verification filtering was applied
-
-This PR is clear for merge from a secrets perspective.`;
+            commentBody += "## 🔍 TruffleHog Secret Scan Results\n\n";
+            commentBody += "✅ **No secrets detected in this PR**\n\n";
+            commentBody += "The TruffleHog maximum coverage scan completed successfully with no findings.\n\n";
+            commentBody += "- All " + (totalFindings || "800+") + " detectors were enabled\n";
+            commentBody += "- Full repository history was scanned\n";
+            commentBody += "- No verification filtering was applied\n\n";
+            commentBody += "This PR is clear for merge from a secrets perspective.";
           }
-          
+
           github.rest.issues.createComment({
             issue_number: context.issue.number,
             owner: context.repo.owner,
