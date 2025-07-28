@@ -28,25 +28,26 @@ jobs:
       with:
         fetch-depth: 0  # CRITICAL: Full history like Gitleaks
         
-    - name: TruffleHog Maximum Coverage Scan
+    - name: TruffleHog MAX scan
       id: trufflehog
       uses: trufflesecurity/trufflehog@main
-      continue-on-error: true  # Don't fail pipeline during testing
+      continue-on-error: true          # **never fails the job**
       with:
-        # FORCE FULL REPOSITORY SCAN (like Gitleaks does)
-        base: ""  # Empty = scan entire repository
-        head: ""  # Empty = scan all branches/history
+        # Empty base/head = scan the entire repo history
+        base: ""                       # full scan
+        head: ""                       # full scan
+        # Extra CLI flags for _absolute_ coverage
         extra_args: >-
           --json
           --include-detectors=all
           --no-verification
           --results=verified,unknown,unverified,filtered_unverified
-          --archive-max-size=200MB
-          --archive-max-depth=10
+          --archive-max-size=500MB
+          --archive-max-depth=100
           --archive-timeout=10m
           --concurrency=8
-          --print-avg-detector-time
           --debug
+          --no-update
         
     - name: Display Scan Results
       if: always()
