@@ -42,7 +42,6 @@ jobs:
           --archive-timeout=10m
           --concurrency=8
           --debug
-          --no-update
 
     # 3. Upload raw JSON results for later analysis
     - name: Upload TruffleHog JSON report
