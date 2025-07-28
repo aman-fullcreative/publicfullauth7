@@ -1,0 +1,79 @@
+# TruffleHog Maximum Coverage Exclusion Patterns
+# Optimized for comprehensive detection - only excludes clear false positive sources
+
+# Version control directories (definite exclusions)
+\.git/
+\.svn/
+\.hg/
+\.bzr/
+
+# Binary files and media (definite exclusions)
+\.(exe|dll|so|dylib|bin)$
+\.(jpg|jpeg|png|gif|bmp|ico|svg)$
+\.(mp3|mp4|avi|mov|wmv|flv)$
+\.(zip|tar|gz|bz2|7z|rar)$
+\.(pdf|doc|docx|xls|xlsx|ppt|pptx)$
+
+# Compiled/generated files (likely false positives)
+\.(pyc|pyo|class|o)$
+\.min\.(js|css)$
+\-min\.(js|css)$
+\.bundle\.(js|css)$
+
+# Large dependency directories (high false positive rate)
+node_modules/.*package-lock\.json$
+node_modules/.*yarn\.lock$
+vendor/.*composer\.lock$
+\.gradle/cache/
+\.maven/repository/
+
+# IDE temporary files (definite exclusions)
+\.DS_Store$
+\.vscode/settings\.json$
+\.idea/workspace\.xml$
+\.idea/modules\.xml$
+Thumbs\.db$
+
+# Log files with timestamps (high entropy false positives)
+\.(log|logs)$
+\.log\.\d+$
+
+# Test fixtures with dummy data - BE CAREFUL, some may contain real secrets
+# Only exclude very specific dummy/example patterns
+test.*fixtures.*dummy
+test.*fixtures.*example
+test.*fixtures.*mock
+spec.*fixtures.*dummy
+spec.*fixtures.*example
+
+# Build artifacts (temporary exclusions - review if needed)
+build/.*\.map$
+dist/.*\.map$
+\.cache/
+\.tmp/
+
+# Minified libraries (high false positive rate)
+\.min\.js$
+\.min\.css$
+.*-min\.js$
+.*-min\.css$
+
+# Package manager files (metadata only)
+package-lock\.json$
+yarn\.lock$
+composer\.lock$
+Gemfile\.lock$
+Pipfile\.lock$
+poetry\.lock$
+
+# Environment template files (intentionally safe)
+\.env\.example$
+\.env\.sample$
+\.env\.template$
+config\.example\.(json|yaml|yml)$
+settings\.example\.(json|yaml|yml)$
+
+# Documentation that clearly contains examples (not real secrets)
+README.*example
+docs.*example
+documentation.*example
