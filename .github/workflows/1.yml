@@ -37,13 +37,7 @@ jobs:
           --json
           --include-detectors=all
           --no-verification
-          --results=verified,unknown,unverified,filtered_unverified
-          --archive-max-size=500MB
-          --archive-max-depth=20
-          --archive-timeout=10m
-          --concurrency=8
           --debug
-          --no-update
 
     - name: Parse TruffleHog Results and Generate Summary
       id: parse_results
